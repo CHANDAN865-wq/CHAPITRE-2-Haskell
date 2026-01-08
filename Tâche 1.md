@@ -1,148 +1,220 @@
 # CHAPITRE-2-Haskell
 
 
----
-
-## 📘 HC1T1 – Tâche 1 : Composition de fonctions
-
-### 🎯 Objectif
-
-Créer trois fonctions :
-
-1. **`double`** : multiplie un nombre par 2
-2. **`increment`** : augmente un nombre de 1
-3. **`doubleThenIncrement`** : utilise la **composition de fonctions** pour
-
-   * d’abord **doubler**
-   * puis **incrémenter**
+Très bien 👍
+Voici une **correction complète, très explicite et pédagogique**, exactement dans l’esprit de **HC2T1 – Vérification des types dans GHCi**.
 
 ---
 
-## 🧠 Rappel théorique : Composition de fonctions en Haskell
+# 📘 HC2T1 – Tâche 1 : Vérification des types dans GHCi
 
-En Haskell, la **composition de fonctions** se fait avec l’opérateur :
+## 🎯 Objectif de l’exercice
+
+Apprendre à :
+
+* **prédire le type** d’une expression Haskell
+* **vérifier ce type dans GHCi** avec la commande `:type` (ou `:t`)
+
+---
+
+## 🧠 Rappel important
+
+Dans **GHCi**, on utilise la commande :
 
 ```haskell
-(.)
+:type expression
 ```
 
-👉 `(f . g) x = f (g x)`
-
-Cela signifie :
-
-* on applique d’abord `g` à `x`
-* puis `f` au résultat
-
----
-
-## 🧩 Implémentation en Haskell
+ou plus simplement :
 
 ```haskell
--- Fonction double : multiplie un nombre par 2
-double :: Int -> Int
-double x = x * 2
-
--- Fonction increment : ajoute 1 à un nombre
-increment :: Int -> Int
-increment x = x + 1
-
--- Composition de fonctions :
--- on applique d'abord double, puis increment
-doubleThenIncrement :: Int -> Int
-doubleThenIncrement = increment . double
-
--- Fonction principale
-main :: IO ()
-main = do
-    let x = 5
-    putStrLn ("Nombre initial : " ++ show x)
-    putStrLn ("Après double : " ++ show (double x))
-    putStrLn ("Après incrément : " ++ show (increment x))
-    putStrLn ("Après double puis incrément : " ++ show (doubleThenIncrement x))
+:t expression
 ```
 
 ---
 
-## 🔍 Explication détaillée
+## 📝 Expressions à étudier
 
-### 1️⃣ Fonction `double`
+Nous allons, pour chaque expression :
 
-```haskell
-double :: Int -> Int
-double x = x * 2
-```
-
-* Prend un entier `x`
-* Retourne `2 × x`
-
-Exemple :
-
-```haskell
-double 5 = 10
-```
+1. **Écrire le type attendu**
+2. **Vérifier dans GHCi**
+3. **Expliquer le résultat**
 
 ---
 
-### 2️⃣ Fonction `increment`
+## 1️⃣ Expression : `42`
+
+### 🔮 Type attendu
 
 ```haskell
-increment :: Int -> Int
-increment x = x + 1
+42 :: Num a => a
 ```
 
-* Prend un entier `x`
-* Retourne `x + 1`
-
-Exemple :
+### 🔍 Vérification dans GHCi
 
 ```haskell
-increment 10 = 11
+:t 42
 ```
+
+### ✅ Résultat obtenu
+
+```haskell
+42 :: Num a => a
+```
+
+### 🧩 Explication
+
+* `42` est un **nombre**
+* Haskell ne précise pas s’il s’agit de `Int`, `Integer`, `Float`, etc.
+* Il impose seulement que le type appartienne à la **classe `Num`**
+
+👉 C’est ce qu’on appelle le **polymorphisme numérique**
 
 ---
 
-### 3️⃣ Fonction `doubleThenIncrement` (composition)
+## 2️⃣ Expression : `3.14`
+
+### 🔮 Type attendu
 
 ```haskell
-doubleThenIncrement = increment . double
+3.14 :: Fractional a => a
 ```
 
-Cela signifie :
+### 🔍 Vérification dans GHCi
 
 ```haskell
-doubleThenIncrement x = increment (double x)
+:t 3.14
 ```
 
-Exemple :
+### ✅ Résultat obtenu
 
 ```haskell
-doubleThenIncrement 5
-= increment (double 5)
-= increment 10
-= 11
+3.14 :: Fractional a => a
 ```
+
+### 🧩 Explication
+
+* `3.14` est un **nombre décimal**
+* Il appartient à la classe `Fractional`
+* Cela inclut des types comme `Float` et `Double`
 
 ---
 
-## ▶️ Résultat à l’exécution
+## 3️⃣ Expression : `"Haskell"`
 
+### 🔮 Type attendu
+
+```haskell
+"Haskell" :: [Char]
 ```
-Nombre initial : 5
-Après double : 10
-Après incrément : 6
-Après double puis incrément : 11
+
+### 🔍 Vérification dans GHCi
+
+```haskell
+:t "Haskell"
 ```
+
+### ✅ Résultat obtenu
+
+```haskell
+"Haskell" :: [Char]
+```
+
+### 🧩 Explication
+
+* En Haskell, une chaîne de caractères est une **liste de caractères**
+* `[Char]` signifie : liste (`[]`) de caractères (`Char`)
 
 ---
 
-## ✅ Points importants à retenir
+## 4️⃣ Expression : `'Z'`
 
-✔ La composition rend le code **plus lisible**
-✔ Pas besoin d’écrire explicitement l’argument `x`
-✔ Très utilisée en **programmation fonctionnelle**
+### 🔮 Type attendu
+
+```haskell
+'Z' :: Char
+```
+
+### 🔍 Vérification dans GHCi
+
+```haskell
+:t 'Z'
+```
+
+### ✅ Résultat obtenu
+
+```haskell
+'Z' :: Char
+```
+
+### 🧩 Explication
+
+* Les caractères sont écrits avec des **guillemets simples**
+* `'Z'` est un **seul caractère**, donc de type `Char`
+
+---
+
+## 5️⃣ Expressions : `True` et `False` (Vrai et Faux)
+
+### 🔮 Type attendu
+
+```haskell
+True  :: Bool
+False :: Bool
+```
+
+### 🔍 Vérification dans GHCi
+
+```haskell
+:t True
+:t False
+```
+
+### ✅ Résultat obtenu
+
+```haskell
+True  :: Bool
+False :: Bool
+```
+
+### 🧩 Explication
+
+* `Bool` est le type logique en Haskell
+* Il ne possède que **deux valeurs** : `True` et `False`
+
+⚠️ Attention :
+
+```haskell
+true   -- ❌ erreur
+false  -- ❌ erreur
+```
+
+Haskell est **sensible à la casse**
+
+---
+
+## 📊 Récapitulatif des types
+
+| Expression  | Type Haskell        |
+| ----------- | ------------------- |
+| `42`        | `Num a => a`        |
+| `3.14`      | `Fractional a => a` |
+| `"Haskell"` | `[Char]`            |
+| `'Z'`       | `Char`              |
+| `True`      | `Bool`              |
+| `False`     | `Bool`              |
+
+---
+
+## ✅ Points clés à retenir
+
+✔ Haskell est **fortement typé**
+✔ Les types sont souvent **déduits automatiquement**
+✔ `:t` est indispensable pour comprendre le code
+✔ Les nombres sont **polymorphes par défaut**
 
 ---
 
 
 
-Dis-moi 😊
